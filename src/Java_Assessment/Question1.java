@@ -21,18 +21,18 @@ public class Question1 {
             }
             if(s1.charAt(i)==']' && stack[top]=='[')
             {
-                pop();
-                top--;
+                top=pop(top);
+
             }
             if(s1.charAt(i)=='}' && stack[top]=='{')
             {
-                pop();
-                top--;
+                top=pop(top);
+
             }
                 if(s1.charAt(i)==')' && stack[top]=='(')
                 {
-                    pop();
-                    top--;
+                    top=pop(top);
+
                 }
         }
         if(top!=-1)
@@ -45,9 +45,10 @@ public class Question1 {
     {
     stack[i]=a;
     }
-    public static void pop()
+    public static int pop(int top)
     {
-
+        top--;
+return top;
     }
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
