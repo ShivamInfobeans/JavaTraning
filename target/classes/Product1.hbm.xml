@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/orm/hbm">
+    <class name="day8.Product1" table="Product1">
+        <id name="id" type="int">
+            <generator class="increment"></generator>
+        </id>
+        <property name="name" column="name" type="string"/>
+        <property name="amount" column="amount" type="int"/>
+
+
+    </class>
+</hibernate-mapping>

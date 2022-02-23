@@ -1,0 +1,1 @@
+          Set gives output of non duplicate element while list doesn't remove duplicates
