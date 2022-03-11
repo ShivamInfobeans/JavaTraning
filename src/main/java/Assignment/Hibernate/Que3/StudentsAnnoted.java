@@ -1,10 +1,16 @@
-package Assignment.Hibarnate_Assessment.Question3;
+package Assignment.Hibernate.Que3;
 
-public class Students {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Students")
+public class StudentsAnnoted {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
 
-    public Students(String name, int marks) {
+    public StudentsAnnoted(String name, int marks) {
         this.name = name;
         this.marks = marks;
     }

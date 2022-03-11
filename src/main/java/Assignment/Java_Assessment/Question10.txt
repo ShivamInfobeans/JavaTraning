@@ -1,4 +1,0 @@
- Difference b/w Hashmap and LinkedHashmap is:
-          Both are used for storing non duplicate elements.
-          But Hashmap gives output that is not in order as write in input
-          and linkedhashmap gives output in order as it write in input
