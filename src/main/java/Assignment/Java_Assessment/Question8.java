@@ -1,4 +1,4 @@
-package Java_Assessment;
+package Assignment.Java_Assessment;
 
 import java.io.*;
 import java.util.Arrays;

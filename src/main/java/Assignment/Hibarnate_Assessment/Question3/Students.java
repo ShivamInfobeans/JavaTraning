@@ -1,4 +1,4 @@
-package Hibarnate_Assessment.Question3;
+package Assignment.Hibarnate_Assessment.Question3;
 
 public class Students {
     private int id;

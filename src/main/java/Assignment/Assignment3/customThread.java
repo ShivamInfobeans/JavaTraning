@@ -1,4 +1,4 @@
-package Assignment3;
+package Assignment.Assignment3;
 
 public class customThread extends Thread {
     private double a[][];

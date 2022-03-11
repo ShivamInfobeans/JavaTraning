@@ -1,4 +1,4 @@
-package Assignment3;
+package Assignment.Assignment3;
 import java.util.*;
 public class GenericQueue<E> {
     private final List<E> list = new ArrayList<>();

@@ -1,4 +1,4 @@
-package Assignment3;
+package Assignment.Assignment3;
 
 public class Question5 extends Thread {
     public static void main(String[] args) {
