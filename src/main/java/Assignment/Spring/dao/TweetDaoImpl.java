@@ -1,9 +1,10 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
-import day18.Tweet;
+import Assignment.Spring.Tweet;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Query;
@@ -11,8 +12,16 @@ import java.util.List;
 
 @Component
 public class TweetDaoImpl implements TweetDao {
-    @Autowired
+
     private Session session;
+
+    public TweetDaoImpl(){
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        configuration.addAnnotatedClass(Tweet.class);
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        session = sessionFactory.openSession();
+    }
 
     @Override
     public List<Tweet> readAll() {
@@ -28,11 +37,12 @@ public class TweetDaoImpl implements TweetDao {
     }
 
     @Override
-    public List<Tweet> fetchTweets(String email) {
+    public  List<Tweet> fetchTweets(String email) {
         String hql = "from Tweet where email = :email";
-        Query query = session.createQuery(hql, Tweet.class);
+        Query query = session.createQuery(hql);
         query.setParameter("email", email);
         return query.getResultList();
+
     }
 
     @Override

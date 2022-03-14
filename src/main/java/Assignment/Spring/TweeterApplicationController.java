@@ -1,12 +1,12 @@
-package day18;
+package Assignment.Spring;
 
-import day18.dao.TweetDao;
-import day18.dao.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import Assignment.Spring.dao.TweetDao;
+import Assignment.Spring.dao.TweetDaoImpl;
+import Assignment.Spring.dao.UserDao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,20 +39,28 @@ Find out all the code which deals with database and move them to a separate clas
 UserDaoImpl , TweetDaoImpl implement this single interface.
 (If you have other name apart from user or tweet use appropriately)
  */
-@Controller
+@Component
+@RestController
 public class TweeterApplicationController {
     private Map<String, User> userProfile = new HashMap<>();
+    private Map<String, Tweet> tw = new HashMap<>();
+
     private Map<String, List<Tweet>> tweets = new HashMap<>();
     private Map<String, List<String>> following = new HashMap<>();
     private UserDao userDao;
-    private TweetDao tweetDao;
+    private TweetDao tweetDao=new TweetDaoImpl();;
 
     public TweeterApplicationController(TweetDao tweetDao, UserDao userDao) {
         List<User> list = userDao.readAll();
         for (User user : list) {
             userProfile.put(user.getEmail(), user);
         }
-
+        List<Tweet> list1 = tweetDao.readAll();
+        for (Tweet tweet: list1)
+        {
+            tw.put(tweet.getEmail(), tweet);
+        }
+        System.out.println("ssssssssssssssssssssssss"+tw);
     }
 
     /*
@@ -79,13 +87,27 @@ public class TweeterApplicationController {
     }
 
     @GetMapping("/getTweets")
-    public ModelAndView fetchTweets(@RequestParam String email) {
-        List<Tweet> tweetList = tweetDao.fetchTweets(email);
+    public ModelAndView getTweets(@RequestParam String email) {
+        if (!tw.containsKey(email)) {
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            return errorMessageModelAndView("You haven't posted any tweet yet!");
+        }
+            List<Tweet> tweetList = tweetDao.fetchTweets(email);
         ModelAndView modelAndView = new ModelAndView("tweets");
-        modelAndView.getModel().put("tweets", tweetList);
-        modelAndView.getModel().put("name", tweetList.get(0).getName());
+        System.out.println(tweetList);
+        modelAndView.getModel().put("Tweet",tweetList);
+        //modelAndView.getModel().put("name",tweetList.get(0).getName());
 
         return modelAndView;
+
+//    public ModelAndView getTweets(@RequestParam String email) {
+//        System.out.println("TRwhadndjshdswd"+email);
+//        List<Tweet> tweetList = tweetDao.fetchTweets(email);
+//        ModelAndView modelAndView = new ModelAndView("tweets");
+//        modelAndView.getModel().put("tweet", tweetList);
+//        modelAndView.getModel().put("name", tweetList);
+//
+//        return modelAndView;
 
     }
 
@@ -94,7 +116,8 @@ public class TweeterApplicationController {
         if (!isUserValid(formData)) {
             return errorMessageModelAndView("Wrong credentials");
         }
-        ModelAndView modelAndView = new ModelAndView("profile");
+        System.out.println("aaaaaaaaaa");
+        ModelAndView modelAndView = new ModelAndView("Profile");
         String email = formData.get("email").get(0);
         String name = userProfile.get(email).getName();
         modelAndView.getModel().put("name", name);

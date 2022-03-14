@@ -1,6 +1,6 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
-import day18.User;
+import Assignment.Spring.User;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> readAll() {
-        return session.createQuery("from users", User.class).getResultList();
+        return session.createQuery("from User", User.class).getResultList();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User readById(int id) {
-        Query query = session.createQuery("from users where id=:id", User.class);
+        Query query = session.createQuery("from User where id=:id", User.class);
         query.setParameter("id", id);
         return (User) query.getSingleResult();
 

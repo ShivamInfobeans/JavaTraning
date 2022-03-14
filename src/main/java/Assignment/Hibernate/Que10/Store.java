@@ -1,6 +1,7 @@
 package Assignment.Hibernate.Que10;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;

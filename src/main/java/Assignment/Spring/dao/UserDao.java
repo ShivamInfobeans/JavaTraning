@@ -1,6 +1,6 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
-import day18.User;
+import Assignment.Spring.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

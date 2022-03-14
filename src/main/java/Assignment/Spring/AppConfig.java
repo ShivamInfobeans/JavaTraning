@@ -1,4 +1,4 @@
-package day18;
+package Assignment.Spring;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

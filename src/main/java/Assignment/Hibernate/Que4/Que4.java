@@ -1,6 +1,6 @@
 package Assignment.Hibernate.Que4;
 import day8.Product1;
-import jakarta.persistence.Query;
+import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

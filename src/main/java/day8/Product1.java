@@ -5,10 +5,12 @@ public class Product1 {
     private int amount;
     private String name;
 
-    public Product1(int amount, String name) {
+
+    public Product1(String name, int amount) {
         this.amount = amount;
         this.name = name;
     }
+   
 
     public int getId() {
         return id;

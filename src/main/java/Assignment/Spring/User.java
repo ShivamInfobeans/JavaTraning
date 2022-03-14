@@ -1,4 +1,4 @@
-package day18;
+package Assignment.Spring;
 
 import javax.persistence.*;
 

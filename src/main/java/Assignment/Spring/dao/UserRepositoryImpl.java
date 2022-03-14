@@ -1,7 +1,7 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
-import day18.Tweet;
-import day18.User;
+import Assignment.Spring.Tweet;
+import Assignment.Spring.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

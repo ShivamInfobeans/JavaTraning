@@ -1,6 +1,7 @@
 package Assignment.Hibernate.Que3;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Students")
@@ -9,6 +10,9 @@ public class StudentsAnnoted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    public StudentsAnnoted() {
+    }
 
     public StudentsAnnoted(String name, int marks) {
         this.name = name;

@@ -1,4 +1,4 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
 import java.util.List;
 

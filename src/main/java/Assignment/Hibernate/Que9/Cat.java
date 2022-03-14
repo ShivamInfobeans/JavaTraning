@@ -1,10 +1,10 @@
 package Assignment.Hibernate.Que9;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
+import javax.persistence.*;
 @Entity
 public class Cat {
     /*
@@ -16,7 +16,7 @@ public class Cat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    Cat(){
+    public Cat(){
 
     }
 

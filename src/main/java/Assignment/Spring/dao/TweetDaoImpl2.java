@@ -1,6 +1,6 @@
-package day18.dao;
+package Assignment.Spring.dao;
 
-import day18.Tweet;
+import Assignment.Spring.Tweet;
 
 import java.util.List;
 

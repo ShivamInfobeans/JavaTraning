@@ -1,10 +1,10 @@
-package day18;
+package Assignment.Spring;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TweetTable")
+@Table(name = "tweettable")
 public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
