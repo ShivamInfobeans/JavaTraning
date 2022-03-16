@@ -1,4 +1,4 @@
-package Assignment.Spring.dao;
+package Assignment.Spring.Que2;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ public interface Dao<T> {
     List<T> readAll();
     void create(T entity);
     T readById(int id);
-    void update(T entity);
+    Boolean update(T entity);
     void delete(T entity);
+    T readByEmail(String entity);
 }

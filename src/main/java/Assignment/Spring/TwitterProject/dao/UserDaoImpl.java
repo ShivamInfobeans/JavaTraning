@@ -1,8 +1,11 @@
-package Assignment.Spring.dao;
+package Assignment.Spring.TwitterProject.dao;
 
-import Assignment.Spring.User;
+import Assignment.Spring.TwitterProject.User;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Query;
@@ -10,9 +13,17 @@ import java.util.List;
 
 @Component
 public class UserDaoImpl implements UserDao {
-    @Autowired
+
     private Session session;
 
+    public UserDaoImpl()
+    {
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        configuration.addAnnotatedClass(User.class);
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        session = sessionFactory.openSession();
+    }
     @Override
     public List<User> readAll() {
         return session.createQuery("from User", User.class).getResultList();
@@ -20,9 +31,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void create(User user) {
-        session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
         session.persist(user);
-        session.getTransaction().commit();
+        transaction.commit();
     }
 
     @Override

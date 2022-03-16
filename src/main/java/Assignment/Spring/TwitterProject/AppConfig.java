@@ -1,4 +1,4 @@
-package Assignment.Spring;
+package Assignment.Spring.TwitterProject;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +13,9 @@ public class AppConfig {
         configuration.configure();
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Tweet.class);
+       // configuration.addAnnotatedClass(Post.class);
+       // configuration.addAnnotatedClass(Assignment.Spring.Que2.User.class);
+
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         return sessionFactory.openSession();
     }

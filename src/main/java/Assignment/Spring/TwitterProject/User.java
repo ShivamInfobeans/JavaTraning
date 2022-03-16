@@ -1,4 +1,4 @@
-package Assignment.Spring;
+package Assignment.Spring.TwitterProject;
 
 import javax.persistence.*;
 

@@ -1,6 +1,6 @@
-package Assignment.Spring.dao;
+package Assignment.Spring.TwitterProject.dao;
 
-import Assignment.Spring.User;
+import Assignment.Spring.TwitterProject.User;
 
 import java.util.List;
 

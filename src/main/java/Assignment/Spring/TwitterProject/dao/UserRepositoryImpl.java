@@ -1,7 +1,7 @@
-package Assignment.Spring.dao;
+package Assignment.Spring.TwitterProject.dao;
 
-import Assignment.Spring.Tweet;
-import Assignment.Spring.User;
+import Assignment.Spring.TwitterProject.Tweet;
+import Assignment.Spring.TwitterProject.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

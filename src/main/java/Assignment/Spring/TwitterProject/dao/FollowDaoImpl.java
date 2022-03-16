@@ -1,6 +1,5 @@
-package Assignment.Spring.dao;
-
-import Assignment.Spring.Tweet;
+package Assignment.Spring.TwitterProject.dao;
+import Assignment.Spring.TwitterProject.Follow;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,47 +10,33 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Component
-public class TweetDaoImpl implements TweetDao {
-
+public class FollowDaoImpl implements FollowDao {
     private Session session;
-
-    public TweetDaoImpl(){
+    FollowDaoImpl(){
         Configuration configuration = new Configuration();
         configuration.configure();
-        configuration.addAnnotatedClass(Tweet.class);
+        configuration.addAnnotatedClass(Follow.class);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         session = sessionFactory.openSession();
     }
-
     @Override
-    public List<Tweet> readAll() {
-        return session.createQuery("from Tweet", Tweet.class).getResultList();
-
+    public List<Object[]> readAll() {
+        List<Object[]> list = session.createQuery("select email,userEmail from Follow ",Object[].class ).getResultList();
+        return list;
     }
 
     @Override
-    public void create(Tweet tweet) {
-        Transaction transaction = session.beginTransaction();
-        session.persist(tweet);
-        transaction.commit();
-    }
-
-    @Override
-    public  List<Tweet> fetchTweets(String email) {
-        String hql = "from Tweet where email = :email";
+    public List<Follow> readByEmail(String email) {
+        String hql = "from Follow where email = :email";
         Query query = session.createQuery(hql);
         query.setParameter("email", email);
         return query.getResultList();
-
     }
 
     @Override
-    public void update(Tweet tweet) {
-
-    }
-
-    @Override
-    public void delete(Tweet tweet) {
-
+    public void create(Follow follow) {
+        Transaction transaction = session.beginTransaction();
+        session.persist(follow);
+        transaction.commit();
     }
 }

@@ -23,6 +23,8 @@ Ex:
 post the results
 (ii) Then make the exception global and post the resutls
 
+Consuming a REST Service.
+RestTemplate
  */
 public class Main {
 }

@@ -1,6 +1,6 @@
-package Assignment.Spring.dao;
+package Assignment.Spring.TwitterProject.dao;
 
-import Assignment.Spring.User;
+import Assignment.Spring.TwitterProject.User;
 
 public interface UserRepository {
     User get(int id);

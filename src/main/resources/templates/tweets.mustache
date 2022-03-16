@@ -3,6 +3,7 @@
 
 </head>
 <div>
+
     {{#Tweet}}
 <div class="card">
     <div class="card-header">
@@ -16,5 +17,10 @@
     </div>
 </div>
     {{/Tweet}}
+    <form action="/createtw" method="post">
+        <input hidden name="email" value={{email}}>
+        <input hidden name="name" value={{name}}>
 
+        <input type="submit"/>
+    </form>
 </div>
