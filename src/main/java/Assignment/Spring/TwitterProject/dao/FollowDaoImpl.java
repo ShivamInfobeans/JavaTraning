@@ -1,5 +1,6 @@
 package Assignment.Spring.TwitterProject.dao;
 import Assignment.Spring.TwitterProject.Follow;
+import Assignment.Spring.TwitterProject.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,7 +13,7 @@ import java.util.List;
 @Component
 public class FollowDaoImpl implements FollowDao {
     private Session session;
-    FollowDaoImpl(){
+   public FollowDaoImpl(){
         Configuration configuration = new Configuration();
         configuration.configure();
         configuration.addAnnotatedClass(Follow.class);
@@ -20,9 +21,8 @@ public class FollowDaoImpl implements FollowDao {
         session = sessionFactory.openSession();
     }
     @Override
-    public List<Object[]> readAll() {
-        List<Object[]> list = session.createQuery("select email,userEmail from Follow ",Object[].class ).getResultList();
-        return list;
+    public List<Follow> readAll() {
+      return   session.createQuery("from Follow", Follow.class).getResultList();
     }
 
     @Override

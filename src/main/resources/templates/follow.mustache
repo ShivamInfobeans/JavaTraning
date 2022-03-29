@@ -1,6 +1,11 @@
 <div>
-    <h>Followings</h>
-    {{^following}}
-        <p>{{follow}}</p>
-    {{/following}}
+    <h>You Can Follow</h>
+    {{#users}}
+    <form action="/doFollow" method="get">
+        <p>{{email}}</p>
+        <input hidden name="email" value={{email1}}>
+        <input hidden name="userEmail" value={{email}}>
+        <input type="submit" value="FOLLOW">
+    </form>
+    {{/users}}
 </div>

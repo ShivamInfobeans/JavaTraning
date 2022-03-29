@@ -1,19 +1,19 @@
 package Assignment.Spring.TwitterProject;
 
-import Assignment.Spring.TwitterProject.dao.TweetDao;
-import Assignment.Spring.TwitterProject.dao.TweetDaoImpl;
-import Assignment.Spring.TwitterProject.dao.UserDao;
-import Assignment.Spring.TwitterProject.dao.UserDaoImpl;
+import Assignment.Spring.TwitterProject.dao.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
 POJO - Plain old Java Object
@@ -46,41 +46,86 @@ UserDaoImpl , TweetDaoImpl implement this single interface.
 public class TweeterApplicationController {
     private Map<String, User> userProfile = new HashMap<>();
     private Map<String, Tweet> tw = new HashMap<>();
+    private Map<String, Follow> fl = new HashMap<>();
 
     private Map<String, List<Tweet>> tweets = new HashMap<>();
     private Map<String, List<String>> following = new HashMap<>();
-    private UserDao userDao=new UserDaoImpl();
-    private TweetDao tweetDao=new TweetDaoImpl();;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private TweetDao tweetDao;
+    @Autowired
+    private FollowDao followDao;
 
-    public TweeterApplicationController(TweetDao tweetDao, UserDao userDao) {
+
+    public TweeterApplicationController(TweetDao tweetDao, UserDao userDao, FollowDao followDao)
+    {
         List<User> list = userDao.readAll();
         for (User user : list) {
             userProfile.put(user.getEmail(), user);
         }
         List<Tweet> list1 = tweetDao.readAll();
-        for (Tweet tweet: list1)
-        {
+        for (Tweet tweet : list1) {
             tw.put(tweet.getEmail(), tweet);
         }
-        System.out.println("ssssssssssssssssssssssss"+tw);
+        List<Follow> list2 = followDao.readAll();
+        for (Follow follow : list2) {
+            fl.put(follow.getEmail(), follow);
+        }
+        System.out.println("ssssssssssssssssssssssss" + tw);
     }
 
-    /*
-    Template Engine -> Mustache, JSP, Thymeleaf
-     */
-    @GetMapping("/displayUserDetails")
-    public ModelAndView getUserDetails() {
-        ModelAndView modelAndView = new ModelAndView("users");
+
+    @GetMapping("/Follow")
+    public ModelAndView Follow(@RequestParam String email1){
+        ModelAndView modelAndView = new ModelAndView("follow");
         if (userProfile.isEmpty())
             allAccDetails();
         List<User> users = new ArrayList<>();
         for (Map.Entry entry : userProfile.entrySet()) {
-            users.add((User) entry.getValue());
+            Collection<User> user_s = userProfile.values();
+            List<Follow> follows = followDao.readAll();
+            List<User> userList = user_s.stream().filter(user ->
+                    follows.stream()
+                            .anyMatch(follow -> !follow.getUserEmail()
+                                    .equals(user.getEmail()))&& !user.getEmail().equals(email1)).collect(Collectors.toList());
+            modelAndView.getModel().put("users", userList);
+            modelAndView.getModel().put("email1", email1);
+
+            return modelAndView;
         }
-        System.out.println("aaaaaa"+users);
-        modelAndView.getModel().put("users", users);
+        return errorMessageModelAndView("error");
+    }
+
+    @GetMapping("/doFollow")
+    public ModelAndView doFollow(@RequestParam String email,String userEmail){
+        ModelAndView modelAndView = new ModelAndView("follow");
+        if (userProfile.isEmpty())
+            allAccDetails();
+        List<User> users = new ArrayList<>();
+        for (Map.Entry entry : userProfile.entrySet()) {
+            Collection<User> user_s = userProfile.values();
+            List<Follow> follows = followDao.readAll();
+            List<User> userList = user_s.stream().filter(user ->
+                    follows.stream()
+                            .anyMatch(follow -> !follow.getUserEmail()
+                                    .equals(user.getEmail()))&& !user.getEmail().equals(email)).collect(Collectors.toList());
+            modelAndView.getModel().put("users", userList);
+            return modelAndView;
+        }
+        return errorMessageModelAndView("error");
+    }
+
+    @GetMapping("/Followers")
+    public ModelAndView Followers(@RequestParam String email){
+        ModelAndView modelAndView = new ModelAndView("followers");
+            List<Follow> follows = followDao.readAll();
+           List<Follow> fol= follows.stream().filter(follow -> follow.getEmail().equals(email)).collect(Collectors.toList());
+            modelAndView.getModel().put("users", fol);
+
         return modelAndView;
     }
+
 
     @GetMapping("/loginForm")
     public ModelAndView loginForm() {
@@ -89,65 +134,63 @@ public class TweeterApplicationController {
     }
 
     @GetMapping("/signup")
-    public ModelAndView signup()
-    {
+    public ModelAndView signup() {
         ModelAndView m1 = new ModelAndView("signup");
         return m1;
     }
-    @PostMapping (value="/createtw",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+
+    @PostMapping(value = "/createtw", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView createtw(@RequestBody MultiValueMap<String, String> formData) {
         ModelAndView modelAndView = new ModelAndView("CreateTweet");
-        modelAndView.getModel().put("email",formData.get("email").get(0));
-        modelAndView.getModel().put("name",formData.get("name").get(0));
-       // modelAndView.getModel().put("password",formData.get("password").get(0));
+        modelAndView.getModel().put("email", formData.get("email").get(0));
+        modelAndView.getModel().put("name", formData.get("name").get(0));
+        // modelAndView.getModel().put("password",formData.get("password").get(0));
         return modelAndView;
     }
 
-    @PostMapping (value="/createtw1",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/createtw1", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView createtw1(@RequestBody MultiValueMap<String, String> formData) {
         System.out.println(formData.get("email").get(0));
-      //  ModelAndView modelAndView = new ModelAndView("tweets");
-        Tweet t2=new Tweet(formData.get("name").get(0),formData.get("email").get(0),formData.get("tweet").get(0), LocalDateTime.now());
+        //  ModelAndView modelAndView = new ModelAndView("tweets");
+        Tweet t2 = new Tweet(formData.get("name").get(0), formData.get("email").get(0), formData.get("tweet").get(0), LocalDateTime.now());
         tweetDao.create(t2);
         List<Tweet> tweetList = tweetDao.fetchTweets(formData.get("email").get(0));
         ModelAndView modelAndView = new ModelAndView("tweets");
         System.out.println(tweetList);
-        modelAndView.getModel().put("Tweet",tweetList);
-        modelAndView.getModel().put("email",tweetList.get(0).getEmail());
-        modelAndView.getModel().put("name",tweetList.get(0).getName());
+        modelAndView.getModel().put("Tweet", tweetList);
+        modelAndView.getModel().put("email", tweetList.get(0).getEmail());
+        modelAndView.getModel().put("name", tweetList.get(0).getName());
 
         return modelAndView;
     }
 
-    @PostMapping (value="/createuser",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/createuser", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView createuser(@RequestBody MultiValueMap<String, String> formData) {
-        ModelAndView m1=new ModelAndView("login");
-        if(userProfile.containsKey(formData.get("email").get(0)))
-        {
+        ModelAndView m1 = new ModelAndView("login");
+        if (userProfile.containsKey(formData.get("email").get(0))) {
             return m1;
-        }
-        else
-        {
+        } else {
             System.out.println(formData.get("email").get(0));
-            User u2=new User(formData.get("name").get(0),formData.get("email").get(0),formData.get("password").get(0));
+            User u2 = new User(formData.get("name").get(0), formData.get("email").get(0), formData.get("password").get(0));
             userDao.create(u2);
             return m1;
         }
 
     }
+
     @GetMapping("/getTweets")
     public ModelAndView getTweets(@RequestParam String email) {
         if (!tw.containsKey(email)) {
             System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxx");
             return errorMessageModelAndView("You haven't posted any tweet yet!");
         }
-            List<Tweet> tweetList = tweetDao.fetchTweets(email);
+        List<Tweet> tweetList = tweetDao.fetchTweets(email);
         ModelAndView modelAndView = new ModelAndView("tweets");
         System.out.println(tweetList);
-        modelAndView.getModel().put("Tweet",tweetList);
-        modelAndView.getModel().put("email",tweetList.get(0).getEmail());
-        modelAndView.getModel().put("name",tweetList.get(0).getName());
-        modelAndView.getModel().put("password",userProfile.get(email).getPassword());
+        modelAndView.getModel().put("Tweet", tweetList);
+        modelAndView.getModel().put("email", tweetList.get(0).getEmail());
+        modelAndView.getModel().put("name", tweetList.get(0).getName());
+        modelAndView.getModel().put("password", userProfile.get(email).getPassword());
 
         return modelAndView;
 
@@ -297,7 +340,7 @@ public class TweeterApplicationController {
         return responseEntity;
     }
 
-//    @PostMapping("/createTweet1")
+    //    @PostMapping("/createTweet1")
 //    public ModelAndView createTweet1(@RequestParam String email) {
 //        if (!userProfile.containsKey(email)) {
 //            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -314,7 +357,7 @@ public class TweeterApplicationController {
     //User can create tweet -->POST
     @PostMapping("/createtweet")
     @ResponseBody
-    ResponseEntity<String> createTweet(@RequestBody Tweet tweet,@RequestParam String password) {
+    ResponseEntity<String> createTweet(@RequestBody Tweet tweet, @RequestParam String password) {
         ResponseEntity<String> responseEntity = null;
         String email = tweet.getEmail();
         if (userProfile.containsKey(email)) {
@@ -322,13 +365,13 @@ public class TweeterApplicationController {
                 if (tweets.containsKey(email))
                     tweets.get(email).add(tweet);
                 else {
-        System.out.println(tweet+"jjjjjjjjjj");
+                    System.out.println(tweet + "jjjjjjjjjj");
 
 
-        List<Tweet> list = new ArrayList<>();
+                    List<Tweet> list = new ArrayList<>();
                     list.add(tweet);
                     tweets.put(email, list);
-              }
+                }
                 tweetDao.create(tweet);
                 responseEntity = new ResponseEntity<>("Tweet added successfully", HttpStatus.OK);
             } else {
